@@ -11,11 +11,4 @@ public class MysqlAndSpringApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MysqlAndSpringApplication.class, args);
 	}
-	
-
-    @Bean
-    ModelMapper getModelMapper() {
-        return new ModelMapper();
-    }
-	
 }

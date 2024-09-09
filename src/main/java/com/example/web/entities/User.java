@@ -16,16 +16,23 @@ public class User {
     private String email;
 
     private String password;
+    
+    private String role;
 
     // No-argument constructor
     User() {
     }
 
     public User(String email, String password) {
-        this.email = email;
-        this.password = password;
+        this(email, password, "USER");
     }
 
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.setRole(role);
+    }
+    
     public String getEmail() {
         return this.email;
     }
@@ -41,4 +48,12 @@ public class User {
     void setPassword(String newPassword) {
         this.password = newPassword;
     }
+
+	public String getRole() {
+		return this.role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 }
