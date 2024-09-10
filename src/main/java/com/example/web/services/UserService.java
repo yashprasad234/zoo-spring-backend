@@ -17,11 +17,11 @@ public class UserService {
 	}
 	
 	public User getUser(User user) {
-		return userRepository.findByUsername(user.getUsername()); 
+		return userRepository.findByUsername(user.getUsername()).orElseThrow(null); 
 	}
 	
 	public User getUserByUsername(String username) {
-		return userRepository.findByUsername(username);
+		return userRepository.findByUsername(username).orElseThrow(null);
 	}
 	
 }

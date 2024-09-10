@@ -91,4 +91,39 @@ public class ResponseDTO {
 			this.id = id;
 		}
 	}
+	
+	public static class LoginResponse {
+		
+		private String token;
+		
+		private long expiresIn;
+		
+		// Getters and setters...
+	    public LoginResponse() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public LoginResponse(String token, long expiresIn) {
+			super();
+			this.token = token;
+			this.expiresIn = expiresIn;
+		}
+		
+		public String getToken() {
+			return this.token;
+		}
+		
+		public void setToken(String token) {
+			this.token = token;
+		}
+
+		public long getExpiresIn() {
+			return this.expiresIn;
+		}
+
+		public void setExpiresIn(long expiresIn) {
+			this.expiresIn = expiresIn;
+		}
+	}
 }

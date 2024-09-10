@@ -1,4 +1,4 @@
-package com.example.web.config.filters;
+package com.example.web.configs.filters;
 
 import java.io.IOException;
 import java.util.Collections;
