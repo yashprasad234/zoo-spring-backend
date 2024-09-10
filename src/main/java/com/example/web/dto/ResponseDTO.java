@@ -2,36 +2,36 @@ package com.example.web.dto;
 
 public class ResponseDTO {
 	public static class UserEmailResponse {
-		String email;
+		String username;
 		
-		public String getEmail() {
-			return this.email;
+		public String getUsername() {
+			return this.username;
 		}
 		
-		public void setEmail(String email) {
-			this.email = email;
+		public void setUsername(String username) {
+			this.username = username;
 		}
 		
 		public UserEmailResponse() {
 			super();
 		}
 		
-		public UserEmailResponse(String email) {
-			this.email = email;
+		public UserEmailResponse(String username) {
+			this.username = username;
 		}
 	}
 	
 	public static class UserDetails {
 		Integer id;
-		String email;
+		String username;
 		String role;
 		
-		public String getEmail() {
-			return this.email;
+		public String getUsername() {
+			return this.username;
 		}
 		
-		public void setEmail(String email) {
-			this.email = email;
+		public void setUsername(String username) {
+			this.username = username;
 		}
 
 		public Integer getId() {
@@ -54,8 +54,8 @@ public class ResponseDTO {
 			super();
 		}
 		
-		public UserDetails(Integer id, String email, String role) {
-			this.email = email;
+		public UserDetails(Integer id, String username, String role) {
+			this.username = username;
 			this.id = id;
 			this.role = role;
 		}
@@ -63,15 +63,15 @@ public class ResponseDTO {
 	}
 	
 	public static class UserEmailAndIdResponse {
-		String email;
+		String username;
 		Integer id;
 		
-		public String getEmail() {
-			return this.email;
+		public String getUsername() {
+			return this.username;
 		}
 		
-		public void setEmail(String email) {
-			this.email = email;
+		public void setUsername(String username) {
+			this.username = username;
 		}
 
 		public Integer getId() {
@@ -86,8 +86,8 @@ public class ResponseDTO {
 			super();
 		}
 		
-		public UserEmailAndIdResponse(Integer id, String email) {
-			this.email = email;
+		public UserEmailAndIdResponse(Integer id, String username) {
+			this.username = username;
 			this.id = id;
 		}
 	}

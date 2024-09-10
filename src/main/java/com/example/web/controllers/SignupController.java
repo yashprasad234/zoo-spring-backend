@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.web.entities.User;
 import com.example.web.services.UserService;
@@ -15,25 +16,24 @@ import com.example.web.dto.ResponseDTO.UserEmailResponse;
  @RestController
  public class SignupController {
 	 @Autowired
-	 private final UserService userService;
+	 private UserService userService;
 
 	 @Autowired
-	 private final ModelMapper modelMapper;
-	 // Constructor injection
-	 public SignupController(UserService userService, ModelMapper modelMapper) {
-		 this.userService = userService;
-		 this.modelMapper = modelMapper;
-	 }
+	 private ModelMapper modelMapper;
+	 
+	 @Autowired
+	 private BCryptPasswordEncoder bCryptPasswordEncoder;
 	 
 	 @PostMapping("/signup")	 
 	 public ResponseEntity<UserEmailResponse> signup(@RequestBody User signupInput) {
-		 User existingUser = userService.getUserByEmail(signupInput.getEmail());
+		 User existingUser = userService.getUserByUsername(signupInput.getUsername());
 		 if(existingUser != null) {
 			 System.out.println("User already exists");
 			 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		 } else {
-			 User newUser = userService.createUser(signupInput);
-			 UserEmailResponse userDto = this.modelMapper.map(newUser, UserEmailResponse.class);
+			 User newUser = new User(signupInput.getUsername(), bCryptPasswordEncoder.encode(signupInput.getPassword()));
+			 userService.createUser(newUser);
+			 UserEmailResponse userDto = modelMapper.map(newUser, UserEmailResponse.class);
 			 System.out.println("New user created successfully");
 			 return new ResponseEntity<>(userDto, HttpStatus.CREATED);
 		 }

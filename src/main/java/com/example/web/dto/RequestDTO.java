@@ -3,7 +3,7 @@ package com.example.web.dto;
 public class RequestDTO {
 	public static class UserSignupInputs{		
 
-		String email;
+		String username;
 		String password;
 
 		public UserSignupInputs() {
@@ -13,15 +13,15 @@ public class RequestDTO {
 		
 		public UserSignupInputs(String username, String password) {
 			super();
-			this.email = username;
+			this.username = username;
 			this.password = password;
 		}
 		
-		public String getEmail() {
-			return email;
+		public String getUsername() {
+			return username;
 		}
-		public void setEmail(String username) {
-			this.email = username;
+		public void setUsername(String username) {
+			this.username = username;
 		}
 		public String getPassword() {
 			return password;

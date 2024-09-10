@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.web.entities.User;
 import com.example.web.services.UserService;
@@ -16,22 +17,19 @@ import com.example.web.dto.ResponseDTO.UserEmailAndIdResponse;
  public class LoginController {
 	 
 	 @Autowired
-	 private final UserService userService;
+	 private UserService userService;
 	 
 	 @Autowired
-	 private final ModelMapper modelMapper;
+	 private ModelMapper modelMapper;
 	 
-	 // Constructor injection
-	 public LoginController(UserService userService, ModelMapper modelMapper) {
-		 this.userService = userService;
-		 this.modelMapper = modelMapper;
-	 }
+	 @Autowired
+	 private BCryptPasswordEncoder bCryptPasswordEncoder;
 	 
 	 @PostMapping("/login")
 	 public ResponseEntity<UserEmailAndIdResponse> login(@RequestHeader(value="X-Email") String email, @RequestHeader(value="X-Password") String password) {
-		 User fetchUser = userService.getUserByEmail(email);
+		 User fetchUser = userService.getUserByUsername(email);
 		 if(fetchUser != null) {
-			 if(fetchUser.getPassword().equals(password)) {
+			 if(bCryptPasswordEncoder.matches(password, fetchUser.getPassword())) {
 				 UserEmailAndIdResponse userDto = this.modelMapper.map(fetchUser, UserEmailAndIdResponse.class);
 				 System.out.println("Logged In!");
 				 return new ResponseEntity<>(userDto, HttpStatus.OK);

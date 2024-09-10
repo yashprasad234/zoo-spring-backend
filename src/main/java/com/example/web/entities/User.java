@@ -13,7 +13,7 @@ public class User {
     Integer id;
 
     @Column(unique = true)
-    private String email;
+    private String username;
 
     private String password;
     
@@ -23,22 +23,22 @@ public class User {
     User() {
     }
 
-    public User(String email, String password) {
-        this(email, password, "USER");
+    public User(String username, String password) {
+        this(username, password, "USER");
     }
 
-    public User(String email, String password, String role) {
-        this.email = email;
+    public User(String username, String password, String role) {
+        this.username = username;
         this.password = password;
         this.setRole(role);
     }
     
-    public String getEmail() {
-        return this.email;
+    public String getUsername() {
+        return this.username;
     }
 
-    void setEmail(String newEmail) {
-        this.email = newEmail;
+    void setUsername(String newUsername) {
+        this.username = newUsername;
     }
 
     public String getPassword() {

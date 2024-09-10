@@ -5,9 +5,7 @@ import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class BasicTestFilter extends HttpFilter {
 	
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	private final UserService userService;
 	
@@ -61,13 +60,13 @@ public class BasicTestFilter extends HttpFilter {
             return;
         }
         
-        User user = userService.getUserByEmail(token.getEmail());
+        User user = userService.getUserByUsername(token.getUsername());
 //        UsernamePasswordAuthenticationToken authToken = 
 //            new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
 //        SecurityContextHolder.getContext().setAuthentication(authToken);
         
         UsernamePasswordAuthenticationToken authReq
-        = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(authReq);
 
         // allow the HttpRequest to go to Spring's DispatcherServlet
@@ -78,7 +77,7 @@ public class BasicTestFilter extends HttpFilter {
 
 	private UserSignupInputs extractUsernameAndPasswordFrom(HttpServletRequest request) {
         UserSignupInputs userDet = new UserSignupInputs(request.getHeader("X-Email"), request.getHeader("X-Password"));
-        System.out.println("Extracted email: " + userDet.getEmail() + " and password: " + userDet.getPassword());
+        System.out.println("Extracted email: " + userDet.getUsername() + " and password: " + userDet.getPassword());
         return userDet;
     }
 
@@ -86,7 +85,7 @@ public class BasicTestFilter extends HttpFilter {
     private boolean notAuthenticated(UserSignupInputs token) {
         // compare the token with what you have in your database...or in-memory...or in LDAP...
     	System.out.println("starting authentication");
-    	User user = userService.getUserByEmail(token.getEmail());
+    	User user = userService.getUserByUsername(token.getUsername());
     	System.out.println("user password from db: " + user.getPassword());
     	if(user != null) {
     		System.out.println("User found");
@@ -101,7 +100,7 @@ public class BasicTestFilter extends HttpFilter {
     }
 
     private boolean notAuthorized(UserSignupInputs token, HttpServletRequest request) {
-    	User user = userService.getUserByEmail(token.getEmail());
+    	User user = userService.getUserByUsername(token.getUsername());
         if(user != null) {
             // Add your authorization logic here (for example, based on user roles)
             if (user.getRole().equals("USER")) { // Example check for admin role

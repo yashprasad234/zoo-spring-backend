@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.dto.ResponseDTO.UserDetails;
-import com.example.web.dto.ResponseDTO.UserEmailResponse;
 import com.example.web.entities.User;
 import com.example.web.services.UserService;
 
@@ -24,7 +23,7 @@ public class UserDetailsController
 	@GetMapping("/getuser/{email}")
 	public UserDetails getuser(@PathVariable String email) {
 		
-		User fetchedUser = userService.getUserByEmail(email);
+		User fetchedUser = userService.getUserByUsername(email);
 		UserDetails userDetails = modelMapper.map(fetchedUser, UserDetails.class);
 		return userDetails;
 	}
