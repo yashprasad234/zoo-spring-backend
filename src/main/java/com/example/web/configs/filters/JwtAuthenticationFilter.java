@@ -1,4 +1,4 @@
-package com.example.web.configs;
+package com.example.web.configs.filters;
 
 import java.io.IOException;
 
@@ -21,10 +21,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final HandlerExceptionResolver handlerExceptionResolver;
+    private HandlerExceptionResolver handlerExceptionResolver;
 
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private JwtService jwtService;
+    private UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
         JwtService jwtService,
@@ -45,6 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     	System.out.println("Inside Jwt Authentication Filter");
         final String authHeader = request.getHeader("Authorization");
 
+        jwtService.getExpirationTime();
+        
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -71,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+        	System.out.println(exception.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
