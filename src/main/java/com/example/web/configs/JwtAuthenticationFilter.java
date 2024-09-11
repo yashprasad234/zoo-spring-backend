@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+    	System.out.println("Inside Jwt Authentication Filter");
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -54,9 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            if (userEmail != null && authentication == null) {
+            if (userEmail != null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {

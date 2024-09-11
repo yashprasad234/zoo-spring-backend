@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.web.dto.RequestDTO.UserSignupInputs;
@@ -26,8 +27,12 @@ public class BasicTestFilter extends HttpFilter {
 	@Autowired
 	private final UserService userService;
 	
-	public BasicTestFilter(UserService userService) {
+	@Autowired
+	private final BCryptPasswordEncoder passwordEncoder;
+	
+	public BasicTestFilter(UserService userService, BCryptPasswordEncoder passwordEncoder) {
 		this.userService = userService;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@Override
@@ -42,7 +47,7 @@ public class BasicTestFilter extends HttpFilter {
             return;
         }
 		
-		System.out.println("Inside filter");
+		System.out.println("Inside Basic Test filter");
         UserSignupInputs token = extractUsernameAndPasswordFrom(request);  // (1)
 
         if (notAuthenticated(token)) {  // (2)
@@ -89,7 +94,7 @@ public class BasicTestFilter extends HttpFilter {
     	System.out.println("user password from db: " + user.getPassword());
     	if(user != null) {
     		System.out.println("User found");
-    		if(user.getPassword().equals(token.getPassword())) {
+    		if(passwordEncoder.matches(token.getPassword(), user.getPassword())) {
     			System.out.println("User is authenticated");
     			return false;
     		}
