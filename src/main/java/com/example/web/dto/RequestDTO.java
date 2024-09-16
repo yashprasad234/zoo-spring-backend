@@ -8,7 +8,6 @@ public class RequestDTO {
 
 		public UserSignupInputs() {
 			super();
-			// TODO Auto-generated constructor stub
 		}
 		
 		public UserSignupInputs(String username, String password) {

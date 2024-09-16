@@ -1,27 +1,8 @@
 package com.example.web.dto;
 
 public class ResponseDTO {
-	public static class UserEmailResponse {
-		String username;
-		
-		public String getUsername() {
-			return this.username;
-		}
-		
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		
-		public UserEmailResponse() {
-			super();
-		}
-		
-		public UserEmailResponse(String username) {
-			this.username = username;
-		}
-	}
 	
-	public static class UserDetails {
+	public static class UserDetailsDto {
 		Integer id;
 		String username;
 		String role;
@@ -50,46 +31,16 @@ public class ResponseDTO {
 			this.role = role;
 		}
 		
-		public UserDetails() {
+		public UserDetailsDto() {
 			super();
 		}
 		
-		public UserDetails(Integer id, String username, String role) {
+		public UserDetailsDto(Integer id, String username, String role) {
 			this.username = username;
 			this.id = id;
 			this.role = role;
 		}
 		
-	}
-	
-	public static class UserEmailAndIdResponse {
-		String username;
-		Integer id;
-		
-		public String getUsername() {
-			return this.username;
-		}
-		
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public Integer getId() {
-			return this.id;
-		}
-		
-		public void setId(Integer id) {
-			this.id = id;
-		}
-		
-		public UserEmailAndIdResponse() {
-			super();
-		}
-		
-		public UserEmailAndIdResponse(Integer id, String username) {
-			this.username = username;
-			this.id = id;
-		}
 	}
 	
 	public static class LoginResponse {
@@ -101,7 +52,6 @@ public class ResponseDTO {
 		// Getters and setters...
 	    public LoginResponse() {
 			super();
-			// TODO Auto-generated constructor stub
 		}
 
 		public LoginResponse(String token, long expiresIn) {

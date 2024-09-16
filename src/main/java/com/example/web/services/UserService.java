@@ -1,5 +1,7 @@
 package com.example.web.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,10 @@ public class UserService {
 	
 	public User getUserByUsername(String username) {
 		return userRepository.findByUsername(username).orElseThrow(null);
+	}
+	
+	public List<User> fetchAllUsers() {
+		return userRepository.findAll();
 	}
 	
 }

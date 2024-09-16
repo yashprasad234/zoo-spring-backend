@@ -16,7 +16,9 @@ import jakarta.persistence.Id;
 @Entity
 public class User implements UserDetails
 {
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
 
@@ -39,6 +41,14 @@ public class User implements UserDetails
         this.username = username;
         this.password = password;
         this.setRole(role);
+    }
+    
+    public int getId() {
+    	return this.id;
+    }
+    
+    public void setId(int id) {
+    	this.id = id;
     }
     
     public String getUsername() {
@@ -67,7 +77,6 @@ public class User implements UserDetails
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return Collections.singletonList(new SimpleGrantedAuthority(role));
 	}
 }

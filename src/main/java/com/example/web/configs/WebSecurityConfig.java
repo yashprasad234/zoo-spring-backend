@@ -34,10 +34,11 @@ public class WebSecurityConfig {
 	@Bean
     CorsConfigurationSource corsConfigurationSource() {
     	CorsConfiguration configuration = new CorsConfiguration();
-    	configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+    	configuration.setAllowedOrigins(Arrays.asList("*"));
     	configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS"));
     	configuration.setAllowedHeaders(Arrays.asList("*"));
-    	configuration.setAllowCredentials(true);
+    	configuration.setAllowCredentials(false);
+    	
     	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     	source.registerCorsConfiguration("/**", configuration);
     	return source;
@@ -47,10 +48,11 @@ public class WebSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin((form) -> form.disable())
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/login", "/signup")
+                                .requestMatchers("/user/login", "/user/signup")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
