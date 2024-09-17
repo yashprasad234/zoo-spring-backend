@@ -1,10 +1,9 @@
 package com.example.web.services;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,21 +35,20 @@ public class AuthenticationService {
     }
     
     public User authenticate(UserSignupInputs input) {
-    	System.out.println("In Authenticate function");
+//    	System.out.println("In Authenticate function");
     	User existingUser = userRepository.findByUsername(input.getUsername())
                 .orElseThrow();
-    	System.out.println("Input username: " + input.getUsername() + ", db Username: " + existingUser.getUsername());
-    	System.out.println("Input password: " + input.getPassword() + ", db password: " + existingUser.getPassword());
+//    	System.out.println("Input username: " + input.getUsername() + ", db Username: " + existingUser.getUsername());
+//    	System.out.println("Input password: " + input.getPassword() + ", db password: " + existingUser.getPassword());
     	if(existingUser != null) {
-    		System.out.println("User found in db");
+//    		System.out.println("User found in db");
     		if(passwordEncoder.matches(input.getPassword(), existingUser.getPassword())) {
-    			System.out.println("passwords matched");
+//    			System.out.println("passwords matched");
     			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 						input.getUsername(),
 						input.getPassword(),
-						Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-						)
-				);   		
+						new ArrayList<>()
+				));   		
     		}
     		authenticationManager.authenticate(
     				new UsernamePasswordAuthenticationToken(

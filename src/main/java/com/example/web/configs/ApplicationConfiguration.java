@@ -1,5 +1,6 @@
 package com.example.web.configs;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,6 @@ import com.example.web.services.ZooUserDetailservice;
 @Configuration
 public class ApplicationConfiguration 
 {
-	@Autowired
-	ZooUserDetailservice detailservice;
 	
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
@@ -27,8 +26,14 @@ public class ApplicationConfiguration
         return config.getAuthenticationManager();
     }
 
+
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    ModelMapper getModelMapper() {
+        return new ModelMapper();
+    }
+    
+    @Bean
+    AuthenticationProvider authenticationProvider(ZooUserDetailservice detailservice) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(detailservice);

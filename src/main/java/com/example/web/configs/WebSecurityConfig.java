@@ -2,7 +2,7 @@ package com.example.web.configs;
 
 import java.util.Arrays;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +20,11 @@ import com.example.web.configs.filters.JwtAuthenticationFilter;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+	
+	@Autowired
 	private final AuthenticationProvider authenticationProvider;
+	
+	@Autowired
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
     
     public WebSecurityConfig(
@@ -64,8 +68,4 @@ public class WebSecurityConfig {
 		return http.build();
 	}
     
-    @Bean
-    ModelMapper getModelMapper() {
-        return new ModelMapper();
-    }
 }
