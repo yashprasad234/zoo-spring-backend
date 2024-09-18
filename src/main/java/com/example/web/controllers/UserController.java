@@ -23,6 +23,7 @@ import com.example.web.services.AuthenticationService;
 import com.example.web.services.JwtService;
 import com.example.web.services.UserService;
 
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -94,4 +95,5 @@ public class UserController {
 		 UserDetailsDto response = modelMapper.map(fetchedUser, UserDetailsDto.class);
 		 return ResponseEntity.ok(response);
 	 }
+	 
 }
