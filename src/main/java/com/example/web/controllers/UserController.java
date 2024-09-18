@@ -1,8 +1,5 @@
 package com.example.web.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,11 +46,10 @@ public class UserController {
 	
 
 	 @PostMapping("/login")
-	 public ResponseEntity<LoginResponse> login(@RequestHeader(value="X-Email") String email, @RequestHeader(value="X-Password") String password) {
-		 System.out.println("IN CONTROLLER ------ Username: " + email + ", password: " + password);
-		 UserSignupInputs inputs = new UserSignupInputs(email, password);
+	 public ResponseEntity<LoginResponse> login(@RequestBody UserSignupInputs input) {
+		 System.out.println("IN CONTROLLER ------ Username: " + input.getUsername() + ", password: " + input.getPassword());
 		 
-		 User authenticatedUser = authenticationService.authenticate(inputs);
+		 User authenticatedUser = authenticationService.authenticate(input);
 		 System.out.println("authenticated user username: "+authenticatedUser.getUsername());
 		 System.out.println("authenticated user password:"+authenticatedUser.getPassword());
 		 System.out.println("authenticated user role:"+authenticatedUser.getRole());
@@ -63,19 +59,9 @@ public class UserController {
 		 String jwtToken = jwtService.generateToken(user);
 		 System.out.println("JWT ------ " + jwtToken);
 
-	     LoginResponse loginResponse = new LoginResponse();
-	     loginResponse.setToken(jwtToken);
-	     loginResponse.setExpiresIn(jwtService.getExpirationTime());
+	     LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), modelMapper.map(authenticatedUser, UserDetailsDto.class));
 		 
 	     return ResponseEntity.ok(loginResponse);
-	 }
-	 
-	 @GetMapping("/getusers")
-	 public ResponseEntity<List<UserDetailsDto>> getusers() {
-		 List<User> fetchedUsers = userService.fetchAllUsers();
-		 List<UserDetailsDto> usersList = new ArrayList<>();
-		 fetchedUsers.forEach(u -> usersList.add(modelMapper.map(u, UserDetailsDto.class)));
-		 return ResponseEntity.ok(usersList);
 	 }
 	 
 	 @GetMapping("/me")

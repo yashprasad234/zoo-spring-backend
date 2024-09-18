@@ -49,15 +49,24 @@ public class ResponseDTO {
 		
 		private long expiresIn;
 		
-		// Getters and setters...
-	    public LoginResponse() {
+		private UserDetailsDto userDetails;
+		
+		public LoginResponse(String token, long expiresIn, UserDetailsDto userDetails) {
+			this.token = token;
+			this.expiresIn = expiresIn;
+			this.userDetails = userDetails;
+		}
+		
+		public LoginResponse() {
 			super();
 		}
 
-		public LoginResponse(String token, long expiresIn) {
-			super();
-			this.token = token;
-			this.expiresIn = expiresIn;
+		public UserDetailsDto getUserDetails() {
+			return userDetails;
+		}
+
+		public void setUserDetails(UserDetailsDto userDetails) {
+			this.userDetails = userDetails;
 		}
 		
 		public String getToken() {

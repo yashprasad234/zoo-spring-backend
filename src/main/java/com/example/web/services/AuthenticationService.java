@@ -35,27 +35,25 @@ public class AuthenticationService {
     }
     
     public User authenticate(UserSignupInputs input) {
-//    	System.out.println("In Authenticate function");
+    	System.out.println("In Authenticate function");
     	User existingUser = userRepository.findByUsername(input.getUsername());
-//    	System.out.println("Input username: " + input.getUsername() + ", db Username: " + existingUser.getUsername());
-//    	System.out.println("Input password: " + input.getPassword() + ", db password: " + existingUser.getPassword());
-    	if(existingUser != null) {
-//    		System.out.println("User found in db");
-    		if(passwordEncoder.matches(input.getPassword(), existingUser.getPassword())) {
-//    			System.out.println("passwords matched");
-    			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+    	System.out.println("Input username: " + input.getUsername() + ", db Username: " + existingUser.getUsername());
+    	System.out.println("Input password: " + input.getPassword() + ", db password: " + existingUser.getPassword());
+    	System.out.println("User found in db");
+		if(passwordEncoder.matches(input.getPassword(), existingUser.getPassword())) {
+			System.out.println("passwords matched");
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					input.getUsername(),
+					input.getPassword(),
+					new ArrayList<>()
+			));   		
+		}
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
 						input.getUsername(),
-						input.getPassword(),
-						new ArrayList<>()
-				));   		
-    		}
-    		authenticationManager.authenticate(
-    				new UsernamePasswordAuthenticationToken(
-    						input.getUsername(),
-    						input.getPassword()
-    						)
-    				);
-    	} else return null;
+						input.getPassword()
+						)
+				);
         return existingUser;
     }
 }
