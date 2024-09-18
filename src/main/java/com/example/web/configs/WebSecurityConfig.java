@@ -23,16 +23,11 @@ public class WebSecurityConfig {
 	
 	@Autowired
 	private final AuthenticationProvider authenticationProvider;
-	
-	@Autowired
-	private final JwtAuthenticationFilter jwtAuthenticationFilter;
     
     public WebSecurityConfig(
-    		JwtAuthenticationFilter jwtAuthenticationFilter,
             AuthenticationProvider authenticationProvider
     ) {
     	this.authenticationProvider = authenticationProvider;
-    	this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 	
 	@Bean

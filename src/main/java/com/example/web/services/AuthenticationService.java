@@ -36,8 +36,7 @@ public class AuthenticationService {
     
     public User authenticate(UserSignupInputs input) {
 //    	System.out.println("In Authenticate function");
-    	User existingUser = userRepository.findByUsername(input.getUsername())
-                .orElseThrow();
+    	User existingUser = userRepository.findByUsername(input.getUsername());
 //    	System.out.println("Input username: " + input.getUsername() + ", db Username: " + existingUser.getUsername());
 //    	System.out.println("Input password: " + input.getPassword() + ", db password: " + existingUser.getPassword());
     	if(existingUser != null) {
@@ -56,7 +55,7 @@ public class AuthenticationService {
     						input.getPassword()
     						)
     				);
-    	}
+    	} else return null;
         return existingUser;
     }
 }

@@ -1,11 +1,8 @@
 package com.example.web.services;
 
-import java.util.function.Supplier;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.example.web.customClasses.MyUserDetails;
@@ -27,14 +24,14 @@ public class ZooUserDetailservice implements UserDetailsService
     }
 	
 	@Override
-	public MyUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username)
-                .orElseThrow(new Supplier<UsernameNotFoundException>() {
-                    public UsernameNotFoundException get() {
-                        return new UsernameNotFoundException("User not found");
-                    }
-                });
-		return modelMapper.map(user, MyUserDetails.class);
+	public MyUserDetails loadUserByUsername(String username) {
+		User user = userRepository.findByUsername(username);
+        if (user != null) {        	
+        	return modelMapper.map(user, MyUserDetails.class);
+        } else {
+        	new Error("UsernameNotFoundException");
+        	return null;
+        }
 	}
 
 }
