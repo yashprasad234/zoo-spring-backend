@@ -1,10 +1,13 @@
 package com.example.web.configs.filters;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -57,17 +60,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
-//            System.out.println(jwtService.exractRole(jwt));
             
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 MyUserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
+		            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + (jwtService.exractRole(jwt)));
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
-                            userDetails.getAuthorities()
+                            Collections.singletonList(authority)
                     );
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
