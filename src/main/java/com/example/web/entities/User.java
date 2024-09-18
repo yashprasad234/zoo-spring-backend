@@ -55,7 +55,7 @@ public class User implements UserDetails
         return this.username;
     }
 
-    void setUsername(String newUsername) {
+    public void setUsername(String newUsername) {
         this.username = newUsername;
     }
 
@@ -63,7 +63,7 @@ public class User implements UserDetails
         return this.password;
     }
 
-    void setPassword(String newPassword) {
+    public void setPassword(String newPassword) {
         this.password = newPassword;
     }
 
