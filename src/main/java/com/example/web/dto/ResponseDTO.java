@@ -1,5 +1,7 @@
 package com.example.web.dto;
 
+import java.util.Map;
+
 public class ResponseDTO {
 	
 	public static class UserDetailsDto {
@@ -43,12 +45,41 @@ public class ResponseDTO {
 		
 	}
 	
+	public static class MenuResponseDto {
+		private UserDetailsDto userDetails;
+		private Map<String, String> map;
+		
+		public UserDetailsDto getUserDetails() {
+			return userDetails;
+		}
+		
+		public void setUserDetails(UserDetailsDto userDetails) {
+			this.userDetails = userDetails;
+		}
+		
+		public Map<String, String> getMap() {
+			return map;
+		}
+		
+		public void setMap(Map<String, String> map) {
+			this.map = map;
+		}
+
+		public MenuResponseDto(UserDetailsDto userDetails, Map<String, String> map) {
+			this.userDetails = userDetails;
+			this.map = map;
+		}
+
+		public MenuResponseDto() {
+		}
+		
+		
+		
+	}
+	
 	public static class LoginResponse {
-		
-		private String token;
-		
-		private long expiresIn;
-		
+		private String token;		
+		private long expiresIn;		
 		private UserDetailsDto userDetails;
 		
 		public LoginResponse(String token, long expiresIn, UserDetailsDto userDetails) {

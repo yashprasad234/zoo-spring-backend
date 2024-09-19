@@ -1,8 +1,12 @@
 package com.example.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.web.customClasses.MyUserDetails;
 import com.example.web.dto.RequestDTO.UserSignupInputs;
 import com.example.web.dto.ResponseDTO.LoginResponse;
+import com.example.web.dto.ResponseDTO.MenuResponseDto;
 import com.example.web.dto.ResponseDTO.UserDetailsDto;
 import com.example.web.entities.User;
 import com.example.web.services.AuthenticationService;
@@ -50,29 +55,25 @@ public class UserController {
 		 System.out.println("IN CONTROLLER ------ Username: " + input.getUsername() + ", password: " + input.getPassword());
 		 
 		 User authenticatedUser = authenticationService.authenticate(input);
-		 System.out.println("authenticated user username: "+authenticatedUser.getUsername());
-		 System.out.println("authenticated user password:"+authenticatedUser.getPassword());
-		 System.out.println("authenticated user role:"+authenticatedUser.getRole());
-		 
 		 MyUserDetails user = modelMapper.map(authenticatedUser, MyUserDetails.class);
-		 
 		 String jwtToken = jwtService.generateToken(user);
-		 System.out.println("JWT ------ " + jwtToken);
-
 	     LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), modelMapper.map(authenticatedUser, UserDetailsDto.class));
 		 
 	     return ResponseEntity.ok(loginResponse);
 	 }
 	 
+	 @PreAuthorize("hasRole('USER')")
 	 @GetMapping("/me")
-	 public ResponseEntity<UserDetailsDto> me(@RequestHeader(value="Authorization") String authHeader) {
+	 public ResponseEntity<MenuResponseDto> me(@RequestHeader(value="Authorization") String authHeader) {
+		 Map<String, String> menu = new HashMap<>();
+		 menu.put("Home", "/");
+		 menu.put("Dashboard", "/dashboard");
+		 menu.put("About", "/about");
 		 String token = authHeader.substring(7);
-		 System.out.println("token:" + token);
 		 String usernameFromToken = jwtService.extractUsername(token);
-		 System.out.println("Username from token: " + usernameFromToken);
 		 User user = userService.getUserByUsername(usernameFromToken);
-		 UserDetailsDto mappedUser = modelMapper.map(user, UserDetailsDto.class); 
-		 return ResponseEntity.ok(mappedUser);
+		 UserDetailsDto mappedUser = modelMapper.map(user, UserDetailsDto.class);
+		 return ResponseEntity.ok(new MenuResponseDto(mappedUser, menu));
 	 }
 	
 	 @GetMapping("/{email}")
