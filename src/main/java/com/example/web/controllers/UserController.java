@@ -1,14 +1,15 @@
 package com.example.web.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.web.customClasses.MyUserDetails;
 import com.example.web.dto.RequestDTO.UserSignupInputs;
 import com.example.web.dto.ResponseDTO.LoginResponse;
-import com.example.web.dto.ResponseDTO.MenuResponseDto;
 import com.example.web.dto.ResponseDTO.UserDetailsDto;
 import com.example.web.entities.User;
 import com.example.web.services.AuthenticationService;
@@ -54,7 +54,13 @@ public class UserController {
 	 public ResponseEntity<LoginResponse> login(@RequestBody UserSignupInputs input) {
 		 System.out.println("IN CONTROLLER ------ Username: " + input.getUsername() + ", password: " + input.getPassword());
 		 
-		 User authenticatedUser = authenticationService.authenticate(input);
+		 User authenticatedUser;
+		try {
+			authenticatedUser = authenticationService.authenticate(input);
+		} catch (Exception e) {
+			System.out.println("------>" + e.getMessage());
+			return ResponseEntity.ok(new LoginResponse(e.getMessage()));
+		}
 		 MyUserDetails user = modelMapper.map(authenticatedUser, MyUserDetails.class);
 		 String jwtToken = jwtService.generateToken(user);
 	     LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), modelMapper.map(authenticatedUser, UserDetailsDto.class));
@@ -64,23 +70,13 @@ public class UserController {
 	 
 	 @PreAuthorize("hasRole('USER')")
 	 @GetMapping("/me")
-	 public ResponseEntity<MenuResponseDto> me(@RequestHeader(value="Authorization") String authHeader) {
-		 Map<String, String> menu = new HashMap<>();
-		 menu.put("Home", "/");
-		 menu.put("Dashboard", "/dashboard");
-		 menu.put("About", "/about");
+	 public ResponseEntity<UserDetailsDto> me(@RequestHeader(value="Authorization") String authHeader) {
+		 if(authHeader == null) return ResponseEntity.ofNullable(null);
 		 String token = authHeader.substring(7);
 		 String usernameFromToken = jwtService.extractUsername(token);
 		 User user = userService.getUserByUsername(usernameFromToken);
-		 UserDetailsDto mappedUser = modelMapper.map(user, UserDetailsDto.class);
-		 return ResponseEntity.ok(new MenuResponseDto(mappedUser, menu));
-	 }
-	
-	 @GetMapping("/{email}")
-	 public ResponseEntity<UserDetailsDto> fetchUser(@PathVariable String email) {
-		 User fetchedUser = userService.getUserByUsername(null);
-		 UserDetailsDto response = modelMapper.map(fetchedUser, UserDetailsDto.class);
-		 return ResponseEntity.ok(response);
+		 if(user == null) return ResponseEntity.ofNullable(null);
+		 return ResponseEntity.ok(modelMapper.map(user, UserDetailsDto.class));
 	 }
 	 
 }

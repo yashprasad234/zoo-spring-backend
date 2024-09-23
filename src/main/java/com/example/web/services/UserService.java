@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.web.dto.RequestDTO.UserSignupInputs;
 import com.example.web.entities.User;
 import com.example.web.repositories.UserRepository;
 
@@ -31,16 +30,43 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 	
-	public User findByUsernameAndUpdate(String username, UserSignupInputs input) {
-		User existingUser = userRepository.findByUsername(username);
+	public User findById(int id) {
+		return userRepository.findById(id);
+	}
+	
+	public User findByIdAndUpdateRole(int id, String role) {
+		User existingUser = userRepository.findById(id);
 		if(existingUser != null) {
-			existingUser.setUsername(input.getUsername());
-			existingUser.setPassword(passwordEncoder.encode(input.getPassword()));
+			existingUser.setRole(role);
 			User savedUser = userRepository.save(existingUser);
 			return savedUser;
 		} else {
 			return null;
 		}
+	}
+	
+	public User findByIdAndUpdateUsername(int id, String username) {
+		User existingUser = userRepository.findById(id);
+		if(existingUser != null) {
+			existingUser.setUsername(username);
+			User savedUser = userRepository.save(existingUser);
+			return savedUser;
+		} else {
+			return null;
+		}
+	}
+	
+	public User findByIdAndUpdatePassword(int id, String oldPassword, String password) {
+		User existingUser = userRepository.findById(id);
+		if(existingUser != null) {
+			if(passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
+				String encodedPassword = passwordEncoder.encode(password);
+				existingUser.setPassword(encodedPassword);
+				User savedUser = userRepository.save(existingUser);
+				return savedUser;
+			}
+		} 
+		return null;
 	}
 	
 	public List<User> fetchAllUsers() {
