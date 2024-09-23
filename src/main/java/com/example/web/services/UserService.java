@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.web.dto.RequestDTO.UserSignupInputs;
 import com.example.web.entities.User;
 import com.example.web.repositories.UserRepository;
 
@@ -18,8 +19,9 @@ public class UserService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
-	public User createUser(User user) {
-		return userRepository.save(user);
+	public User createUser(UserSignupInputs user) {
+		User newUser = new User(user.getUsername(), user.getPassword());
+		return userRepository.save(newUser);
 	}
 	
 	public User getUser(User user) {

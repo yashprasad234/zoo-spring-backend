@@ -1,5 +1,7 @@
 package com.example.web.dto;
 
+import java.time.LocalDateTime;
+
 public class ResponseDTO {
 	
 	public static class UserDetailsDto {
@@ -44,7 +46,6 @@ public class ResponseDTO {
 	}
 	
 	public static class LoginResponse {
-		private String errorMessage;
 		private String token;		
 		private long expiresIn;		
 		private UserDetailsDto userDetails;
@@ -54,11 +55,7 @@ public class ResponseDTO {
 			this.expiresIn = expiresIn;
 			this.userDetails = userDetails;
 		}
-		
-		public LoginResponse(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-		
+
 		public LoginResponse() {
 			super();
 		}
@@ -86,14 +83,35 @@ public class ResponseDTO {
 		public void setExpiresIn(long expiresIn) {
 			this.expiresIn = expiresIn;
 		}
+	}
+	
+	public static class ErrorResponse {
+	    private String message;
+	    private LocalDateTime timestamp;
 
-		public String getErrorMessage() {
-			return errorMessage;
+	    public ErrorResponse() {
+	    }
+	    
+	    public ErrorResponse(String message) {
+	        this.message = message;
+	        this.timestamp = LocalDateTime.now();
+	    }
+
+		public String getMessage() {
+			return message;
 		}
 
-		public void setErrorMessage(String errorMessage) {
-			this.errorMessage = errorMessage;
+		public void setMessage(String message) {
+			this.message = message;
 		}
-		
+
+		public LocalDateTime getTimestamp() {
+			return timestamp;
+		}
+
+		public void setTimestamp(LocalDateTime timestamp) {
+			this.timestamp = timestamp;
+		}
+	    
 	}
 }
