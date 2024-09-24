@@ -66,7 +66,16 @@ public class CommonController {
 		     return ResponseEntity.ok(loginResponse);
 		 }
 	 }
-	
+	 
+	 @GetMapping("/me")
+	 public ResponseEntity<UserDetailsDto> me(@RequestHeader(value="Authorization") String authHeader) {
+		 if(authHeader == null) return ResponseEntity.ofNullable(null);
+		 String token = authHeader.substring(7);
+		 String usernameFromToken = jwtService.extractUsername(token);
+		 User user = userService.getUserByUsername(usernameFromToken);
+		 if(user == null) return ResponseEntity.ofNullable(null);
+		 return ResponseEntity.ok(modelMapper.map(user, UserDetailsDto.class));
+	 }
 
 	 @GetMapping("/forgotpassword")
 	 public ResponseEntity<String> forgot(@RequestHeader(value="X-Email") String email) {

@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin((form) -> form.disable())
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/user/login", "/user/signup", "/user/forgotpassword")
+                                .requestMatchers("/login", "/signup", "/forgotpassword")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

@@ -9,13 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.dto.ResponseDTO.UserDetailsDto;
 import com.example.web.entities.User;
-import com.example.web.services.JwtService;
 import com.example.web.services.UserService;
 
 @RestController
@@ -27,20 +25,6 @@ public class AdminController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	@Autowired
-	private JwtService jwtService;
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/me")
-	public ResponseEntity<UserDetailsDto> me(@RequestHeader(value="Authorization") String authHeader) {
-		if(authHeader == null) return ResponseEntity.ofNullable(null);
-		String token = authHeader.substring(7);
-		String usernameFromToken = jwtService.extractUsername(token);
-		User user = userService.getUserByUsername(usernameFromToken);
-		if(user == null) return ResponseEntity.ofNullable(null);
-		return ResponseEntity.ok(modelMapper.map(user, UserDetailsDto.class));
-	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SUPERADMIN')")
 	@GetMapping("/users")

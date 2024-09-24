@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.customClasses.MyUserDetails;
 import com.example.web.dto.RequestDTO.PasswordInputDto;
-import com.example.web.dto.ResponseDTO.UserDetailsDto;
 import com.example.web.entities.User;
 import com.example.web.repositories.UserRepository;
 import com.example.web.services.JwtService;
@@ -39,19 +38,6 @@ public class UserController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-		 
-	
-	 
-	 @PreAuthorize("hasRole('USER')")
-	 @GetMapping("/me")
-	 public ResponseEntity<UserDetailsDto> me(@RequestHeader(value="Authorization") String authHeader) {
-		 if(authHeader == null) return ResponseEntity.ofNullable(null);
-		 String token = authHeader.substring(7);
-		 String usernameFromToken = jwtService.extractUsername(token);
-		 User user = userService.getUserByUsername(usernameFromToken);
-		 if(user == null) return ResponseEntity.ofNullable(null);
-		 return ResponseEntity.ok(modelMapper.map(user, UserDetailsDto.class));
-	 }
 	 
 	 @GetMapping("/forgotpassword")
 	 public ResponseEntity<String> forgot(@RequestHeader(value="X-Email") String email) {
