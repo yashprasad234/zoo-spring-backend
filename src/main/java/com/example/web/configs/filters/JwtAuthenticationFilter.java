@@ -11,11 +11,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.example.web.customClasses.MyUserDetails;
 import com.example.web.services.JwtService;
+import com.example.web.services.UserTokenService;
 import com.example.web.services.ZooUserDetailservice;
 
 import jakarta.servlet.FilterChain;
@@ -32,13 +34,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ZooUserDetailservice userDetailsService;
 	@Autowired
     private final HandlerExceptionResolver handlerExceptionResolver;
+	@Autowired
+	private final UserTokenService userTokenService;
 
     public JwtAuthenticationFilter(JwtService jwtService, 
                                    ZooUserDetailservice userDetailsService, 
-                                   HandlerExceptionResolver handlerExceptionResolver) {
+                                   HandlerExceptionResolver handlerExceptionResolver, UserTokenService userTokenService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
+        this.userTokenService = userTokenService;
     }
 
     @Override
@@ -60,6 +65,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
+            
+            if(!userTokenService.checkTokenIsValid(jwt)) {
+            	filterChain.doFilter(request, response);
+            	throw new IllegalArgumentException("Invalid JWT token");
+            }
             
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +18,10 @@ import com.example.web.dto.ResponseDTO.ErrorResponse;
 import com.example.web.dto.ResponseDTO.LoginResponse;
 import com.example.web.dto.ResponseDTO.UserDetailsDto;
 import com.example.web.entities.User;
+import com.example.web.entities.UserToken;
 import com.example.web.services.JwtService;
 import com.example.web.services.UserService;
+import com.example.web.services.UserTokenService;
 
 @RestController
 public class CommonController {
@@ -35,6 +38,9 @@ public class CommonController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired
+	private UserTokenService userTokenService;
+	
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@RequestBody UserSignupInputs signupInput) {
 		 User existingUser = userService.getUserByUsername(signupInput.getUsername());
@@ -51,7 +57,6 @@ public class CommonController {
 
 	 @PostMapping("/login")
 	 public ResponseEntity<?> login(@RequestBody UserSignupInputs input) {
-		 System.out.println("IN CONTROLLER ------ Username: " + input.getUsername() + ", password: " + input.getPassword());
 		 User existingUser = userService.getUserByUsername(input.getUsername());
 		 
 		 if(existingUser == null) {
@@ -62,9 +67,21 @@ public class CommonController {
 			 }
 			 MyUserDetails user = modelMapper.map(existingUser, MyUserDetails.class);
 			 String jwtToken = jwtService.generateToken(user);
+			 userTokenService.createUserToken(jwtToken, existingUser);
 		     LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), modelMapper.map(existingUser, UserDetailsDto.class));
 		     return ResponseEntity.ok(loginResponse);
 		 }
+	 }
+	 
+	 @PutMapping("/logout")
+	 public ResponseEntity<?> logout(@RequestHeader(value="Authorization") String authHeader) {
+		 if(authHeader == null) return ResponseEntity.ofNullable(null);
+		 String token = authHeader.substring(7);
+		 UserToken existingToken = userTokenService.setTokenNotValid(token);
+		 if(existingToken == null) {
+			 return ResponseEntity.status(400).body("Invalid Token!");
+		 }
+		 return ResponseEntity.ok(existingToken);
 	 }
 	 
 	 @GetMapping("/me")

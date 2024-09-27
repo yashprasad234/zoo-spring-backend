@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin((form) -> form.disable())
+                .logout((logout) -> logout.disable())
                 .authorizeHttpRequests((requests) -> requests
                                 .requestMatchers("/login", "/signup", "/forgotpassword")
                                 .permitAll()
