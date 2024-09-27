@@ -1,13 +1,10 @@
 package com.example.web.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,9 +20,7 @@ public class UserToken {
 	@Column(unique = true)
 	private String token;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
+	private Integer userId;
 
 	public Integer getId() {
 		return id;
@@ -51,18 +46,18 @@ public class UserToken {
 		this.token = token;
 	}
 
-	public User getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserID(Integer userId) {
+		this.userId = userId;
 	}
 
-	public UserToken(String token, User user) {
+	public UserToken(String token, Integer userId) {
 		this.isValid = true;
 		this.token = token;
-		this.user = user;
+		this.userId = userId;
 	}
 
 	public UserToken() {

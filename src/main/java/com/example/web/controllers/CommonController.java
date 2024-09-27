@@ -67,7 +67,10 @@ public class CommonController {
 			 }
 			 MyUserDetails user = modelMapper.map(existingUser, MyUserDetails.class);
 			 String jwtToken = jwtService.generateToken(user);
-			 userTokenService.createUserToken(jwtToken, existingUser);
+			 
+			 System.out.println(jwtService.extractExpiration(jwtToken));
+			 userTokenService.createUserToken(jwtToken, existingUser.getId()); 
+			 userTokenService.deleteExpiredTokens(existingUser.getId());
 		     LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), modelMapper.map(existingUser, UserDetailsDto.class));
 		     return ResponseEntity.ok(loginResponse);
 		 }
@@ -77,11 +80,15 @@ public class CommonController {
 	 public ResponseEntity<?> logout(@RequestHeader(value="Authorization") String authHeader) {
 		 if(authHeader == null) return ResponseEntity.ofNullable(null);
 		 String token = authHeader.substring(7);
-		 UserToken existingToken = userTokenService.setTokenNotValid(token);
+		 System.out.println("token: " + token);
+		 UserToken existingToken = userTokenService.findUserTokenFromToken(token);
 		 if(existingToken == null) {
+			 System.out.println("Token not found in db");
 			 return ResponseEntity.status(400).body("Invalid Token!");
 		 }
-		 return ResponseEntity.ok(existingToken);
+		 String res = userTokenService.setTokenNotValid(existingToken);
+		 System.out.println("TokenObj token: " + existingToken.getToken()+ " TokenObj isValid: " + existingToken.getIsValid() + " TokenObj id: " + existingToken.getId() + " TokenObj user_id: " + existingToken.getUserId());
+		 return ResponseEntity.ok(res);
 	 }
 	 
 	 @GetMapping("/me")
