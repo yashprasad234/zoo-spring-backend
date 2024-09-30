@@ -62,7 +62,5 @@ public class UserToken {
 
 	public UserToken() {
 	}
-
-	
 	
 }
