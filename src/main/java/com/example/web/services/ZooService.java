@@ -1,5 +1,7 @@
 package com.example.web.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,15 @@ public class ZooService {
 	private ZooRepository zooRepo;
 	
 	public Zoo createZoo(ZooInputs input) {
-		Zoo newZoo = new Zoo(input.getCity(), input.getState(), input.getCountry(), input.getCapacity(), input.getInaugration(), input.getUserId());
+		Zoo newZoo = new Zoo(input.getUserId(), input.getName(), input.getLocation(), input.getArea(), input.getDescription());
 		return zooRepo.save(newZoo);
 	}
+	
+	public List<Zoo> fetchAllZoos() {
+		return zooRepo.findAll();
+	}
+	
+//	public Zoo findZooById(Integer id) {
+//		Zoo zoo = zooRepo.findById(id);
+//	}
 }

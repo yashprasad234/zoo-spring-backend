@@ -3,79 +3,66 @@ package com.example.web.dto;
 public class ZooDTO {
 
 	public static class ZooInputs {
-		private String city;
-		
-		private String state;
-		
-		private String country;
-		
-		private int capacity;
-		
-		private long inaugration;
-		
-		private int userId;
+		private String name;
 
-		public ZooInputs(String city, String state, String country, int capacity, long inaugration, int userId) {
-			super();
-			this.city = city;
-			this.state = state;
-			this.country = country;
-			this.capacity = capacity;
-			this.inaugration = inaugration;
-			this.userId = userId;
-		}
+		private String location;
 
-		public int getUserId() {
-			return userId;
-		}
+		private float area;
+		
+		private String description;
 
-		public void setUserId(int userId) {
-			this.userId = userId;
-		}
-
+		private Integer userId;
+		
 		public ZooInputs() {
 		}
 
-		public String getCity() {
-			return city;
+		public ZooInputs(String name, String location, float area, String description, Integer userId) {
+			super();
+			this.name = name;
+			this.location = location;
+			this.area = area;
+			this.description = description;
+			this.userId = userId;
 		}
 
-		public void setCity(String city) {
-			this.city = city;
+		public String getName() {
+			return name;
 		}
 
-		public String getState() {
-			return state;
+		public void setName(String name) {
+			this.name = name;
 		}
 
-		public void setState(String state) {
-			this.state = state;
+		public String getLocation() {
+			return location;
 		}
 
-		public String getCountry() {
-			return country;
+		public void setLocation(String location) {
+			this.location = location;
 		}
 
-		public void setCountry(String country) {
-			this.country = country;
+		public float getArea() {
+			return area;
 		}
 
-		public int getCapacity() {
-			return capacity;
+		public void setArea(float area) {
+			this.area = area;
 		}
 
-		public void setCapacity(int capacity) {
-			this.capacity = capacity;
+		public String getDescription() {
+			return description;
 		}
 
-		public long getInaugration() {
-			return inaugration;
+		public void setDescription(String description) {
+			this.description = description;
 		}
 
-		public void setInaugration(long inaugration) {
-			this.inaugration = inaugration;
+		public Integer getUserId() {
+			return userId;
 		}
 
-	}
-	
+		public void setUserId(Integer userId) {
+			this.userId = userId;
+		}
+	}	
 }

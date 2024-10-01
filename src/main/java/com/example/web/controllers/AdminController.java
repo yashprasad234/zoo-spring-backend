@@ -25,7 +25,7 @@ public class AdminController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-
+	
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SUPERADMIN')")
 	@GetMapping("/users")
 	 public ResponseEntity<List<UserDetailsDto>> getusers() {

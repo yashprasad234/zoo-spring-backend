@@ -14,7 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class User implements UserDetails
+public class User extends Audit implements UserDetails
 {
     private static final long serialVersionUID = 1L;
 

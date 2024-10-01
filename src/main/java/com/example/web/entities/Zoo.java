@@ -13,20 +13,30 @@ public class Zoo extends Audit{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
+	private String name;
 
-	private String city;
-	
-	private String state;
-	
-	private String country;
-	
-	private int capacity;
-	
-	private int species;
-	
-	private int endageredSpecies;
+	private String location;
 	
 	private long inaugration;
+
+	private float area;
+	
+	private String description;
+	
+	public Zoo() {
+	}
+
+	public Zoo(Integer userId, String name, String location, float area,
+			String description) {
+		this.name = name;
+		this.location = location;
+		this.inaugration = new Date().getTime();
+		this.area = area;
+		this.description = description;
+		this.createdBy = userId;
+		this.updatedBy = userId;
+	}
 
 	public Integer getId() {
 		return id;
@@ -36,52 +46,20 @@ public class Zoo extends Audit{
 		this.id = id;
 	}
 
-	public String getCity() {
-		return city;
+	public String getName() {
+		return name;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getState() {
-		return state;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-
-	public int getSpecies() {
-		return species;
-	}
-
-	public void setSpecies(int species) {
-		this.species = species;
-	}
-
-	public int getEndageredSpecies() {
-		return endageredSpecies;
-	}
-
-	public void setEndageredSpecies(int endageredSpecies) {
-		this.endageredSpecies = endageredSpecies;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public long getInaugration() {
@@ -92,20 +70,20 @@ public class Zoo extends Audit{
 		this.inaugration = inaugration;
 	}
 
-	public Zoo(String city, String state, String country, int capacity, int species,
-			int endageredSpecies, long inaugration, Integer userId) {
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.capacity = capacity;
-		this.inaugration = inaugration;
-		this.createdOn = new Date();
-		this.updatedOn = new Date();
-		this.createdBy = userId;
-		this.updatedBy = userId;
+	public float getArea() {
+		return area;
 	}
 
-	public Zoo() {
+	public void setArea(float area) {
+		this.area = area;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }
