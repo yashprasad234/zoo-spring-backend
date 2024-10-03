@@ -1,6 +1,7 @@
 package com.example.web.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,9 @@ public class ZooController
 	
 	@PreAuthorize("hasRole('ADMIN') OR hasRole('SUPERADMIN')")
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> fetchZoo(@PathVariable("id") Integer id) {
-		
-		return null;
+	public ResponseEntity<?> fetchZoo(@PathVariable Integer id) {
+		Optional<Zoo> fetchedZoo = zooService.findZooById(id);
+		if(fetchedZoo == null) return ResponseEntity.status(404).body("No zoo exists with the given Id");
+		return ResponseEntity.status(200).body(fetchedZoo);
 	}
 }

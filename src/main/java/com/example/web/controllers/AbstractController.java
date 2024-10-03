@@ -1,25 +1,24 @@
 package com.example.web.controllers;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.stream.Stream;
-
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 
 public abstract class AbstractController<T>
 {
-	@SuppressWarnings("unchecked")
-	private final Class<T> objectClass = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	@Autowired
+	CrudRepository<T, Integer> repository;
 	
-	public String[] getMapping()
+	void save(T entity)
 	{
-		return getClass().getAnnotation(RequestMapping.class).value();
+		repository.save(entity);
 	}
 	
-	public void log()
+	void delete(T entity)
 	{
-		Stream.of(getMapping()).forEach(t -> {
-			System.out.println("this is " + getClass().getSimpleName() + " which is used to handle " + objectClass + " object with mapping " + t);
-		});
-		
+		repository.delete(entity);
+	}
+	
+	public T getUser(Integer id) {
+		return repository.findById(id).get();
 	}
 }

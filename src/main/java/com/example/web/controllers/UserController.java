@@ -19,8 +19,7 @@ import com.example.web.services.UserService;
 
 @RestController
 @RequestMapping({"/user", "/consumer"})
-public class UserController
-{
+public class UserController {
 	
 	@Autowired
 	private JwtService jwtService;
@@ -29,7 +28,7 @@ public class UserController
 	private UserService userService;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepo;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -47,7 +46,7 @@ public class UserController
 		 System.out.println("hashedPassword : " + hashedPassword);
 		 user.setPassword(hashedPassword);
 		 System.out.println(user.getPassword());
-		 userRepository.save(user);
+		 userRepo.save(user);
 		 return ResponseEntity.ok("Password changed successfully");
 	 }
 }

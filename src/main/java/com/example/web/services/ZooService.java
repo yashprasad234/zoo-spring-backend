@@ -1,6 +1,7 @@
 package com.example.web.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class ZooService {
 		return zooRepo.findAll();
 	}
 	
-//	public Zoo findZooById(Integer id) {
-//		Zoo zoo = zooRepo.findById(id);
-//	}
+	public Optional<Zoo> findZooById(Integer id) {
+		return zooRepo.findById(id);
+	}
 }

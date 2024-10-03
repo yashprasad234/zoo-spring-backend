@@ -36,6 +36,8 @@ public class Zoo extends Audit{
 		this.description = description;
 		this.createdBy = userId;
 		this.updatedBy = userId;
+		this.createdOn = new Date();
+		this.updatedOn = new Date();
 	}
 
 	public Integer getId() {
