@@ -33,4 +33,12 @@ public class AnimalService {
 	public List<Animal> findAllAnimals() {
 		return animalRepo.findAll();
 	}
+	
+	public void deleteAnimalById(Integer id) {
+		animalRepo.deleteById(id);
+	}
+	
+	public Animal saveUpdatedAnimal(Animal animal) {
+		return animalRepo.save(animal);
+	}
 }

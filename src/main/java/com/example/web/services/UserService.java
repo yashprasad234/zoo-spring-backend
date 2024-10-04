@@ -75,4 +75,7 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
+	public void saveUpdatedUser(User user) {
+		userRepository.save(user);
+	}
 }

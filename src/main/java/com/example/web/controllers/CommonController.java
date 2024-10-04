@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.customClasses.MyUserDetails;
+import com.example.web.dto.RequestDTO.PasswordInputDto;
 import com.example.web.dto.RequestDTO.UserSignupInputs;
 import com.example.web.dto.ResponseDTO.ErrorResponse;
 import com.example.web.dto.ResponseDTO.LoginResponse;
@@ -111,4 +112,19 @@ public class CommonController {
 		 return ResponseEntity.status(400).body("User not found");
 	 }
 	 
+	 @PutMapping("/changePassword")
+	 public ResponseEntity<String> changePassword(@RequestHeader(value="Authorization") String authHeader, @RequestBody PasswordInputDto input) {
+		 String token = authHeader.substring(7);
+		 String usernameFromToken = jwtService.extractUsername(token);
+		 User user = userService.getUserByUsername(usernameFromToken);
+		 if(user == null) {
+			 return ResponseEntity.status(404).body("user not found");
+		 }
+		 String hashedPassword = passwordEncoder.encode(input.getPassword());
+		 System.out.println("hashedPassword : " + hashedPassword);
+		 user.setPassword(hashedPassword);
+		 System.out.println(user.getPassword());
+		 userService.saveUpdatedUser(user);
+		 return ResponseEntity.ok("Password changed successfully");
+	 }
 }

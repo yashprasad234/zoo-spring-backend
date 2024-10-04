@@ -32,21 +32,4 @@ public class UserController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	 
-	 @PreAuthorize("hasRole('USER')")
-	 @PutMapping("/changePassword")
-	 public ResponseEntity<String> changePassword(@RequestHeader(value="Authorization") String authHeader, @RequestBody PasswordInputDto input) {
-		 String token = authHeader.substring(7);
-		 String usernameFromToken = jwtService.extractUsername(token);
-		 User user = userService.getUserByUsername(usernameFromToken);
-		 if(user == null) {
-			 return ResponseEntity.status(404).body("user not found");
-		 }
-		 String hashedPassword = passwordEncoder.encode(input.getPassword());
-		 System.out.println("hashedPassword : " + hashedPassword);
-		 user.setPassword(hashedPassword);
-		 System.out.println(user.getPassword());
-		 userRepo.save(user);
-		 return ResponseEntity.ok("Password changed successfully");
-	 }
 }
