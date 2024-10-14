@@ -9,17 +9,19 @@ public class AnimalDTO {
 		
 		private String gender;
 		
+		private String animalImg;
+		
 		private String species;
 		
 		private String habitat;
 		
 		private Integer userId;
-
-		// Integer zooId, String name, String gender, Date dob, String species, String habitat, Integer userId
-		public AnimalInputs(Integer zooId, String name, String gender, String species, String habitat, Integer userId) {
+		
+		public AnimalInputs(Integer zooId, String name, String gender, String animalImg, String species, String habitat, Integer userId) {
 			this.zooId = zooId;
 			this.name = name;
 			this.gender = gender;
+			this.animalImg = animalImg;
 			this.species = species;
 			this.habitat = habitat;
 			this.userId = userId;
@@ -50,6 +52,14 @@ public class AnimalDTO {
 
 		public void setGender(String gender) {
 			this.gender = gender;
+		}
+
+		public String getAnimalImg() {
+			return animalImg;
+		}
+
+		public void setAnimalImg(String animalImg) {
+			this.animalImg = animalImg;
 		}
 
 		public String getSpecies() {

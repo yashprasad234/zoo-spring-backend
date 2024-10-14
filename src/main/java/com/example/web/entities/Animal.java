@@ -24,16 +24,19 @@ public class Animal extends Audit {
 	
 	private String gender;
 	
+	private String animalImg;
+	
 	private Date dob;
 	
 	private String species;
 	
 	private String habitat;
 
-	public Animal(Zoo zoo, String name, String gender, String species, String habitat, Integer userId) {
+	public Animal(Zoo zoo, String name, String gender, String animalImg, String species, String habitat, Integer userId) {
 		this.zoo = zoo;
 		this.name = name;
 		this.gender = gender;
+		this.animalImg = animalImg;
 		this.dob = new Date();
 		this.species = species;
 		this.habitat = habitat;
@@ -76,6 +79,14 @@ public class Animal extends Audit {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getAnimalImg() {
+		return animalImg;
+	}
+
+	public void setAnimalImg(String animalImg) {
+		this.animalImg = animalImg;
 	}
 
 	public Date getDob() {

@@ -21,7 +21,7 @@ public class AnimalService {
 		Zoo zoo = new Zoo();
 		zoo.setId(input.getZooId());
 		System.out.println(zoo.getId());
-		Animal newAnimal = new Animal(zoo, input.getName(), input.getGender(), input.getSpecies(), input.getHabitat(), input.getUserId());
+		Animal newAnimal = new Animal(zoo, input.getName(), input.getGender(), input.getAnimalImg(), input.getSpecies(), input.getHabitat(), input.getUserId());
 		animalRepo.save(newAnimal);
 		return newAnimal;
 	}

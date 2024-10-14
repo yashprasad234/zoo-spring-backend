@@ -107,6 +107,7 @@ public class CommonController {
 		 User existingUser = userService.getUserByUsername(email);
 		 if(existingUser != null && !existingUser.getRole().matches("SUPERADMIN")) {
 			 String token = jwtService.generateToken(modelMapper.map(existingUser, MyUserDetails.class));
+			 userTokenService.createUserToken(token, existingUser.getId());
 			 return ResponseEntity.ok("Click on the link below to change your password: http://localhost:3000/forgotPassword/change?token="+token);
 		 }		 
 		 return ResponseEntity.status(400).body("User not found");

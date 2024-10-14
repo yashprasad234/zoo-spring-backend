@@ -10,15 +10,13 @@ public abstract class AbstractController<T>
 	
 	void save(T entity)
 	{
+		System.out.println("Save called from abstract controller");
 		repository.save(entity);
 	}
 	
 	void delete(T entity)
 	{
+		System.out.println("Delete called from abstract controller");
 		repository.delete(entity);
-	}
-	
-	public T getUser(Integer id) {
-		return repository.findById(id).get();
 	}
 }
