@@ -53,13 +53,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
     	System.out.println("Inside Jwt Authentication Filter");
         final String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        	filterChain.doFilter(request, response);
+        	return;
+        }
         
         jwtService.getExpirationTime();
         
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         try {
             final String jwt = authHeader.substring(7);

@@ -49,7 +49,4 @@ public class AdminController {
 		 }
 		 return ResponseEntity.ofNullable(null);
 	 }
-	 
-//	 @PreAuthorize("hasRole('ADMIn)")
-//	 @
 }

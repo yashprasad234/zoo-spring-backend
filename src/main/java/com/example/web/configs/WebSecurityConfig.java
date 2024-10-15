@@ -52,7 +52,7 @@ public class WebSecurityConfig {
                 .formLogin((form) -> form.disable())
                 .logout((logout) -> logout.disable())
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/login", "/signup", "/forgotpassword")
+                                .requestMatchers("/login", "/signup", "/forgotpassword", "/role/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
