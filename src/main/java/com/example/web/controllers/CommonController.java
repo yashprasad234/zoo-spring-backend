@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.customClasses.MyUserDetails;
@@ -103,7 +104,7 @@ public class CommonController {
 	 }
 
 	 @GetMapping("/forgotpassword")
-	 public ResponseEntity<String> forgot(@RequestHeader(value="X-Email") String email) {
+	 public ResponseEntity<String> forgot(@RequestParam String email) {
 		 User existingUser = userService.getUserByUsername(email);
 		 if(existingUser != null && !existingUser.getRole().matches("SUPERADMIN")) {
 			 String token = jwtService.generateToken(modelMapper.map(existingUser, MyUserDetails.class));

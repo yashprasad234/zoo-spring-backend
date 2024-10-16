@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.dto.ZooDTO.ZooInputs;
@@ -33,11 +34,20 @@ public class ZooController
 		return ResponseEntity.status(201).body(newZoo);
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/all")
 	public ResponseEntity<?> fetchAllZoos(@RequestHeader(value="Authorization") String authHeader ) {
 		if(authHeader == null) return ResponseEntity.status(400).body("No Auth Header Sent");
 		List<Zoo> zooList = zooService.fetchAllZoos();
 		return ResponseEntity.status(200).body(zooList);
+	}
+	
+	@GetMapping("/list")
+	public ResponseEntity<?> fetchZoosPagination(@RequestParam Integer size, @RequestParam Integer page) {
+		List<Zoo> response = zooService.fetchSomeZoosFromPage(page, size);
+		if(response.isEmpty()) {
+			return ResponseEntity.status(204).body("No more zoos to send");
+		}
+		return ResponseEntity.status(200).body(response);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') OR hasRole('SUPERADMIN')")
