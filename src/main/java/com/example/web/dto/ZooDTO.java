@@ -1,5 +1,9 @@
 package com.example.web.dto;
 
+import java.util.List;
+
+import com.example.web.entities.Zoo;
+
 public class ZooDTO {
 
 	public static class ZooInputs {
@@ -64,5 +68,34 @@ public class ZooDTO {
 		public void setUserId(Integer userId) {
 			this.userId = userId;
 		}
-	}	
+	}
+	
+	public static class ZooPaginationRes {
+		private List<Zoo> zoos;
+		private int pages;
+		public ZooPaginationRes(List<Zoo> zoos, int pages) {
+			super();
+			this.zoos = zoos;
+			this.pages = pages;
+		}
+		
+		public ZooPaginationRes() {
+		}
+
+		public List<Zoo> getZoos() {
+			return zoos;
+		}
+
+		public void setZoos(List<Zoo> zoos) {
+			this.zoos = zoos;
+		}
+
+		public int getPages() {
+			return pages;
+		}
+
+		public void setPages(int pages) {
+			this.pages = pages;
+		}
+	}
 }

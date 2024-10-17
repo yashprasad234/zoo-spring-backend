@@ -1,7 +1,6 @@
 package com.example.web.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.web.dto.ZooDTO.ZooInputs;
+import com.example.web.dto.ZooDTO.ZooPaginationRes;
 import com.example.web.entities.Zoo;
 import com.example.web.repositories.ZooRepository;
 
@@ -28,14 +28,24 @@ public class ZooService {
 		return zooRepo.findAll();
 	}
 	
-	public Optional<Zoo> findZooById(Integer id) {
+	public Zoo findZooById(int id) {
 		return zooRepo.findById(id);
 	}
 	
-	public List<Zoo> fetchSomeZoosFromPage(Integer page, Integer size) {
+	public ZooPaginationRes fetchSomeZoosFromPage(Integer page, Integer size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Zoo> zooPage = zooRepo.findSizeFromPage(pageable);
 		List<Zoo> zoos = zooPage.getContent();
-		return zoos;
+		ZooPaginationRes res = new ZooPaginationRes(zoos, zooPage.getTotalPages());
+		return res;
+	}
+	
+	public Boolean exists(Integer id) {
+		return zooRepo.existsById(id);
+	}
+	
+	public void deleteZoo(Integer id) {
+		zooRepo.deleteById(id);
+		return;
 	}
 }

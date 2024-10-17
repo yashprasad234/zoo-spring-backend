@@ -8,5 +8,5 @@ import com.example.web.entities.UserToken;
 
 public interface UserTokenRepository extends CrudRepository<UserToken, Integer> {
     UserToken findByToken(String token);
-    List<UserToken> findByUserId(Integer userId);
+    List<UserToken> findByUserId(int userId);
 }

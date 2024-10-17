@@ -1,11 +1,12 @@
 package com.example.web.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.dto.ZooDTO.ZooInputs;
+import com.example.web.dto.ZooDTO.ZooPaginationRes;
 import com.example.web.entities.Zoo;
 import com.example.web.services.ZooService;
 
@@ -41,10 +43,16 @@ public class ZooController
 		return ResponseEntity.status(200).body(zooList);
 	}
 	
+//	@GetMapping("/all/{id}")
+//	public ResponseEntity<?> fetchAllExceptOneZoos(@PathVariable int id) {
+//		List<Zoo> zooList = zooService.fetchAllZoos();
+//		List<Zoo> res = new ArrayList<Zoo>();
+//	}
+	
 	@GetMapping("/list")
 	public ResponseEntity<?> fetchZoosPagination(@RequestParam Integer size, @RequestParam Integer page) {
-		List<Zoo> response = zooService.fetchSomeZoosFromPage(page, size);
-		if(response.isEmpty()) {
+		ZooPaginationRes response = zooService.fetchSomeZoosFromPage(page, size);
+		if(response.getZoos().isEmpty()) {
 			return ResponseEntity.status(204).body("No more zoos to send");
 		}
 		return ResponseEntity.status(200).body(response);
@@ -53,8 +61,15 @@ public class ZooController
 	@PreAuthorize("hasRole('ADMIN') OR hasRole('SUPERADMIN')")
 	@GetMapping("/id/{id}")
 	public ResponseEntity<?> fetchZoo(@PathVariable Integer id) {
-		Optional<Zoo> fetchedZoo = zooService.findZooById(id);
+		Zoo fetchedZoo = zooService.findZooById(id);
 		if(fetchedZoo == null) return ResponseEntity.status(404).body("No zoo exists with the given Id");
 		return ResponseEntity.status(200).body(fetchedZoo);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteZoo(@PathVariable Integer id) {
+		if(!zooService.exists(id)) return ResponseEntity.status(404).body("No zoo exists with the given id");
+		zooService.deleteZoo(id);
+		return ResponseEntity.status(200).body("Deleted zoo with id: "+ id +" successfully");
 	}
 }
