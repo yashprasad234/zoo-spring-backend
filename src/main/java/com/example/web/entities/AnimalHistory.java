@@ -27,6 +27,10 @@ public class AnimalHistory {
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "animal_id", referencedColumnName = "id")
 	private Animal animal_id;
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "transferred_by", referencedColumnName = "id")
+	private User user;
 
 	private Date transferredOn;
 
@@ -34,7 +38,8 @@ public class AnimalHistory {
 	public AnimalHistory() {
 	}
 
-	public AnimalHistory(Zoo from_zoo, Zoo to_zoo, Animal animal_id) {
+	public AnimalHistory(Zoo from_zoo, Zoo to_zoo, Animal animal_id, User user) {
+		this.user = user;
 		this.animal_id = animal_id;
 		this.from_zoo = from_zoo;
 		this.to_zoo = to_zoo;

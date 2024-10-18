@@ -11,15 +11,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.web.dto.AnimalDTO.AnimalInputs;
 import com.example.web.entities.Animal;
+import com.example.web.entities.AnimalHistory;
+import com.example.web.entities.User;
 import com.example.web.entities.Zoo;
 import com.example.web.services.AnimalHistoryService;
 import com.example.web.services.AnimalService;
+import com.example.web.services.JwtService;
+import com.example.web.services.UserService;
 import com.example.web.services.ZooService;
 
 @RestController
@@ -34,6 +39,12 @@ public class AnimalController {
 	
 	@Autowired
 	private AnimalHistoryService animalHistoryService;
+	
+	@Autowired
+	private JwtService jwtService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@PostMapping("/create")
 	public ResponseEntity<Animal> create(@RequestBody AnimalInputs input) {
@@ -55,12 +66,14 @@ public class AnimalController {
 	}
 
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> transferAnimal(@PathVariable Integer id, @RequestParam Integer zooId) {
+	public ResponseEntity<?> transferAnimal(@PathVariable Integer id, @RequestParam Integer zooId, @RequestHeader("Authorization") String authHeader) {
 		Animal animal = animalService.getAnimalById(id);
+		String token = authHeader.substring(7);
+		User user = userService.getUserByUsername(jwtService.extractUsername(token));
 		if(animal == null) return ResponseEntity.status(404).body("Failed to fetch animals");
 		Zoo zoo = zooService.findZooById(zooId);
 		if(zoo == null) return ResponseEntity.status(404).body("No zoo with the given Id found");
-		animalHistoryService.create(animal.getZoo(), zoo, animal);
+		animalHistoryService.create(animal.getZoo(), zoo, animal, user);
 		animal.setZoo(zoo);
 		return ResponseEntity.status(200).body(animalService.saveUpdatedAnimal(animal));
 	}
@@ -89,5 +102,18 @@ public class AnimalController {
 			if(list.size() == 0) return ResponseEntity.status(400).body("No animals in the zoo");
 			return ResponseEntity.status(200).body(list);
 		}
+	}
+	
+	@GetMapping("/history/{id}")
+	public ResponseEntity<?> fetchAnimalHistory(@PathVariable int id) {
+		Animal animal = animalService.getAnimalById(id);
+		if(animal == null) return ResponseEntity.status(404).body("No animal with the given id exists");
+		List<AnimalHistory> res = new ArrayList<AnimalHistory>();
+		List<AnimalHistory> allHistory = animalHistoryService.list();
+		for(int i = 0; i < allHistory.size(); i++) {
+			if(allHistory.get(i).getAnimal_id().getId() == animal.getId()) res.add(allHistory.get(i));
+		}
+		if(res.size() == 0) return ResponseEntity.status(404).body("No history for the given animal");
+		return ResponseEntity.status(200).body(res);
 	}
 }

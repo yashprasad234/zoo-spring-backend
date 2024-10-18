@@ -43,11 +43,16 @@ public class ZooController
 		return ResponseEntity.status(200).body(zooList);
 	}
 	
-//	@GetMapping("/all/{id}")
-//	public ResponseEntity<?> fetchAllExceptOneZoos(@PathVariable int id) {
-//		List<Zoo> zooList = zooService.fetchAllZoos();
-//		List<Zoo> res = new ArrayList<Zoo>();
-//	}
+	@GetMapping("/all/{id}")
+	public ResponseEntity<?> fetchAllExceptOneZoos(@PathVariable int id) {
+		List<Zoo> zooList = zooService.fetchAllZoos();
+		List<Zoo> res = new ArrayList<Zoo>();
+		for(int i = 0; i < zooList.size(); i++) {
+			if(zooList.get(i).getId() != id) res.add(zooList.get(i));
+		}
+		if(res.size() == 0) return ResponseEntity.status(404).body("No other zoo exists!");
+		return ResponseEntity.status(200).body(res);
+	}
 	
 	@GetMapping("/list")
 	public ResponseEntity<?> fetchZoosPagination(@RequestParam Integer size, @RequestParam Integer page) {
