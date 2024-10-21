@@ -26,4 +26,13 @@ public class AnimalHistoryService {
 	public List<AnimalHistory> list() {
 		return animalHistoryRepo.findAll();
 	}
+	
+	public List<AnimalHistory> findAnimalHistories(Animal animal) {
+		return animalHistoryRepo.findByAnimal_id(animal);
+	}
+	
+	public void deleteAnimalHistory(AnimalHistory animalHistory) {
+		animalHistoryRepo.delete(animalHistory);
+		return;
+	}
 }

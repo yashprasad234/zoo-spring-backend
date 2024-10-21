@@ -82,6 +82,10 @@ public class AnimalController {
 	public ResponseEntity<?> deleteAnimal(@PathVariable Integer id) {
 		Animal animal = animalService.getAnimalById(id);
 		if(animal == null) return ResponseEntity.status(404).body("Failed to fetch animals");
+		List<AnimalHistory> allHistory = animalHistoryService.list();
+		for(int i = 0; i < allHistory.size(); i++) {
+			if(allHistory.get(i).getAnimal_id().getId() == animal.getId()) animalHistoryService.deleteAnimalHistory(allHistory.get(i));
+		}
 		animalService.deleteAnimalById(id);
 		return ResponseEntity.status(200).body("Animal deleted successfully");
 	}

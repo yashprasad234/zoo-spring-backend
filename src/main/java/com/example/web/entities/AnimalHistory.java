@@ -17,19 +17,19 @@ public class AnimalHistory {
 	private Integer id;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "from_zoo_id", referencedColumnName = "id")
-	private Zoo from_zoo;
+	@JoinColumn(referencedColumnName = "id")
+	private Zoo from;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "to_zoo_id", referencedColumnName = "id")
-	private Zoo to_zoo;
+	@JoinColumn(referencedColumnName = "id")
+	private Zoo to;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "animal_id", referencedColumnName = "id")
-	private Animal animal_id;
+	@JoinColumn(referencedColumnName = "id")
+	private Animal animal;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "transferred_by", referencedColumnName = "id")
+	@JoinColumn(referencedColumnName = "id")
 	private User user;
 
 	private Date transferredOn;
@@ -40,18 +40,18 @@ public class AnimalHistory {
 
 	public AnimalHistory(Zoo from_zoo, Zoo to_zoo, Animal animal_id, User user) {
 		this.user = user;
-		this.animal_id = animal_id;
-		this.from_zoo = from_zoo;
-		this.to_zoo = to_zoo;
+		this.animal = animal_id;
+		this.from = from_zoo;
+		this.to = to_zoo;
 		this.transferredOn = new Date();
 	}
 	
 	public Animal getAnimal_id() {
-		return animal_id;
+		return animal;
 	}
 
 	public void setAnimal_id(Animal animal_id) {
-		this.animal_id = animal_id;
+		this.animal = animal_id;
 	}
 
 	public Integer getId() {
@@ -63,19 +63,19 @@ public class AnimalHistory {
 	}
 
 	public Zoo getFrom_zoo() {
-		return from_zoo;
+		return from;
 	}
 
 	public void setFrom_zoo(Zoo from_zoo) {
-		this.from_zoo = from_zoo;
+		this.from = from_zoo;
 	}
 
 	public Zoo getTo_zoo() {
-		return to_zoo;
+		return to;
 	}
 
 	public void setTo_zoo(Zoo to_zoo) {
-		this.to_zoo = to_zoo;
+		this.to = to_zoo;
 	}
 
 	public Date getTransferredOn() {
